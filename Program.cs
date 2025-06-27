@@ -1,3 +1,9 @@
+using CSharpWebAppRazorDB.Configuration;
+using CSharpWebAppRazorDB.DAO;
+using CSharpWebAppRazorDB.Services;
+using Serilog;
+using Serilog.Events;
+
 namespace CSharpWebAppRazorDB
 {
     public class Program
@@ -8,6 +14,13 @@ namespace CSharpWebAppRazorDB
 
             // Add services to the container.
             builder.Services.AddRazorPages();
+            builder.Services.AddScoped<IStudentDAO, StudentDAOImpl>();
+            builder.Services.AddScoped<IStudentService, StudentServiceImpl>();
+            builder.Services.AddAutoMapper(typeof(MapperConfig));
+            builder.Host.UseSerilog((context, config) =>
+            {
+                config.ReadFrom.Configuration(context.Configuration);
+            });
 
             var app = builder.Build();
 
